@@ -47,6 +47,7 @@
   <textarea class="txt txa" cols="96%" rows="15" name="nos" id="nos"></textarea>
   <div id="opera">
     <input type="submit" class="btn" id="copyExc" value="粘贴到excel">
+    <input type="submit" class="btn" id="sortNo" value="数据排序">
   </div>
   <textarea class="txt txa" cols="96%" rows="15" name="result" id="result"></textarea>  
 </div>
@@ -70,6 +71,11 @@
 		      $('#kc_pop_tip').css('left',scr_wid/2-wid/2).fadeIn(2000).fadeOut(1000);
 	    }
     });
+    $('#sortNo').click(function(){
+      let t = $('#nos').val();
+      let sored = $('#nos').val().split('\n').sort((a,b)=>getFive(a)-getFive(b)).join('\n');
+      $('#result').val(sored).select();
+    });
     function sorteds(arr,n){
       return arr.split('\n').map(e=>e.split('').reverse().join('').substring(0,n)).sort((a,b)=>a-b).map(e=>e.split('').reverse().join(''));
     }
@@ -80,6 +86,10 @@
       })
       return array.length == Object.keys(obj).length;
     }
+    function getFive(trs){
+    	return trs.split('	')[0].split('').reverse().join('').substring(0,6)
+    }
+
   });
 </script>
 <html>
