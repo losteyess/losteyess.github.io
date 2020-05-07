@@ -24,6 +24,10 @@
         .txt{
           margin-top:15px;
         }
+        .area{
+          overflow: auto;
+          width: 100%;
+        }
         .pop_tip {
     z-index: 20002;
     left: 0;
@@ -44,12 +48,15 @@
 <body>
 <div id="header">粘贴证书号</div>
 <div id="content">
-  <textarea class="txt txa" cols="96%" rows="15" name="nos" id="nos"></textarea>
+  <textarea class="txt txa area" rows="15" name="nos" id="nos"></textarea>
   <div id="opera">
     <input type="submit" class="btn" id="copyExc" value="粘贴到excel">
     <input type="submit" class="btn" id="sortNo" value="数据排序">
+    <input type="submit" class="btn" id="diffNo" value="获取Diff">
+    <input type="submit" class="btn" id="sortINnum" value="按需排序">
   </div>
-  <textarea class="txt txa" cols="96%" rows="15" name="result" id="result"></textarea>  
+  <textarea class="txt txa area" rows="15" name="result" id="result"></textarea>  
+  <textarea class="txt txa area" rows="15" name="diff" id="diff_screen"></textarea> 
 </div>
 <div class="pop_tip" id="kc_pop_tip" style="position: fixed; top: 120px;text-align:center">已成功复制到剪切板</div>
 </body>
@@ -80,7 +87,7 @@
       return arr.split('\n').map(e=>e.split('').reverse().join('').substring(0,n)).sort((a,b)=>a-b).map(e=>e.split('').reverse().join(''));
     }
     function isSame(array){
-      let obj = {}
+      let obj = {} 
       array.forEach(e=>{
         obj[e] = 5;
       })
@@ -89,6 +96,23 @@
     function getFive(trs){
     	return trs.split('	')[0].split('').reverse().join('').substring(0,6)
     }
+    $('#diffNo').click(function(){
+      let t = $('#nos').val().split('\n');
+      let res = $('#result').val().split('\n');
+      console.log(diff_in(t,res));
+      $('#diff_screen').val('#1中独有\r\n'+diff_in(t,res).join('\r\n')+'\r\n#2中独有\r\n'+diff_in(res,t).join('\r\n'));
+    });
+    function diff_in(a,b){ //a中独有的
+      return a.filter(function(val){return b.indexOf(val)>=0 ? false:true;})
+    }
+    $('#sortINnum').click(function(){
+      let t = $('#nos').val().split('\n');
+      let res = $('#result').val().split('\n');
+      console.log(diff_in(t,res));
+      let sort_txt = res.map(e=>t.filter(ie=>ie.indexOf(e)>-1)+'').join('\r\n');
+      $('#diff_screen').val(sort_txt);
+    });
+    
 
   });
 </script>
